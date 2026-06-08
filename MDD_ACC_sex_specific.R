@@ -377,12 +377,11 @@ ggplot(df, aes(x = log2FoldChange, y = -log10(pvalue), color = significant)) +
 
 print(top_genes_df)
 
-ggplot(df, aes(x = log2FoldChange)) +
-  geom_histogram(bins = 50, fill = "steelblue", color = "black", alpha = 0.7) +
-  geom_vline(xintercept = 0, color = "red", linetype = "dashed") +
-  labs(x = "log2 Fold Change (Interaction)",
-       y = "Count",
-       title = "Distribution of Sex:Diagnosis interaction effects") +
+ggplot(df, aes(x = log2FoldChange)) + 
+  geom_histogram(bins = 50, fill = "steelblue", color = "black", alpha = 0.7) + 
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed") + 
+  labs(x = "log2 Fold Change (Interaction)", y = "Count", title = "Distribution of Sex:Diagnosis interaction effects") + 
+  scale_y_continuous(breaks = seq(0, 5000, by = 500)) +
   theme_minimal()
 
 target_gene <- "ENSG00000132744" 
@@ -496,6 +495,7 @@ cat("Wilcoxon test p-value:", format(wilcox_p, scientific = TRUE), "\n")
 
 cor_df <- data.frame(males = lfc_males[valid], females = lfc_females[valid])
 cor_df_clean <- cor_df[abs(cor_df$males) < 5 & abs(cor_df$females) < 5, ]
+rep_cor_clean <- cor(cor_df_clean$males, cor_df_clean$females, method = "spearman")
 
 ggplot(cor_df_clean, aes(x = males, y = females)) +
   geom_point(alpha = 0.15, color = "black", size = 0.8) + 
